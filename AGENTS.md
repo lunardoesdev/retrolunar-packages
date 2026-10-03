@@ -358,6 +358,34 @@ Rules:
   `configure` hardcodes `-lz` — the libpng recipe symlinks
   `libz.* → libzlib.*` in `$PREFIX` first (commented, additive).
 
+## Naming a cross toolchain package
+
+A package that builds a compiler, assembler, linker or C runtime for a
+*different* machine is named for its **target**, never for its host:
+`i686-w64-mingw32-binutils`, `i686-w64-mingw32-gcc`,
+`i686-w64-mingw32-mingw-w64`. The target goes in the name because it is the
+fixed, load-bearing half of the package's identity: it decides the
+`--target=` passed to `configure`, the prefix of every installed executable
+(`i686-w64-mingw32-ld`), and the directory the artifacts belong under. The
+host is dynamic — it is whatever system happens to build the package — so it
+cannot appear in the name, and a recipe reads it from the system:
+`--host=$BUILD_TRIPLET --build=$BUILD_TRIPLET`, never a literal
+`x86_64-pc-linux-gnu`.
+
+The one thing that may be spelled out literally is the *target*, and only
+because it is this package's reason to exist. Getting it backwards is the
+real hazard: `binutils` as a bare name means "binutils for whatever system is
+building it", which is what the plain `binutils/` package is, and a
+cross-target binutils must never collide with it — the two install
+`ld`, `as` and `ar` under different names, and a system that requires the
+wrong one gets a linker for the wrong architecture with no error.
+
+Such a package is built for the **native** system, not for the system that
+consumes it: the compiler is a host program that runs on the build machine.
+A system file requires it with `require("i686-w64-mingw32-gcc@native")`,
+which lands the binaries in `$NESTDIR/<DEFAULT_SYSTEM>/bin` — the prefix the
+emitter already puts first on `PATH` for every package block.
+
 ## Writing a system (`<sys>/generic.lua`)
 
 Single `system({ recipe_fallbacks = {"family"}, setup = [[...]] })` with
