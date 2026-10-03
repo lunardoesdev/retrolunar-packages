@@ -1,23 +1,29 @@
-# AGENTS.md — retrolunar package manager
+# AGENTS.md — retrolunar packages
 
-This file is for coding agents working in this repo. It describes how the
-package manager works and how to add or fix packages and systems.
+This file is for coding agents working in this repo. This repo holds only the
+package and system recipes: one directory per package or system, at the repo
+root, with no `packages/` prefix. The `retrolunar` tool itself (loader, C
+binary, Lua interpreter) lives outside this repo; use the system-installed
+`retrolunar` binary and point it at this tree with `--packages .`.
 
 ## What this is
 
-`retrolunar` is a tiny C binary with an embedded Lua 5.5 interpreter
-(`src/main.c`, Lua sources in `lua-5.5.1/`). At startup it runs the Lua
-loader (`src/loader.lua`, embedded into the binary via `src/embed.py` +
-meson `custom_target`). The loader overrides global `require` and the
-`install` subcommand prints a POSIX shell script that builds everything.
+`retrolunar` is a tiny C binary with an embedded Lua 5.5 interpreter. At
+startup it runs its Lua loader, which overrides global `require`. The
+`install` subcommand prints a POSIX shell script that builds everything, and
+`--packages` selects the recipe tree — this repo.
 
-Typical flow:
+Typical flow, run from this repo:
 
 ```sh
-./builddir/retrolunar install --nest ./nest --packages ./packages 'pngprobe@aarch64-android24' > build.sh
+retrolunar install --nest ./nest --packages . 'pngprobe@aarch64-android24' > build.sh
 sh -n build.sh
 ANDROID_HOME=/path/to/sdk sh build.sh
 ```
+
+If `retrolunar` is not on `PATH`, ask the user where the binary is rather
+than searching the filesystem or building one. Nothing in this repo
+compiles the tool itself.
 
 ## Design principle
 
@@ -30,43 +36,45 @@ upstream sources.
 
 ## Repository boundary
 
-Never read from or write to anything outside this repository's directory.
-No scratch files, probes, downloads, logs, workspaces, lock files or build
-output in `/tmp`, `~`, or any sibling directory unless the user has said so
-for that specific case. Everything a task produces lives inside the repo —
-use `nest/.tmp` (or `builddir/`) instead, and delete it when you are done. Do
-not read outside the repo to check what another copy of the tree contains; the
-working copy is the truth.
+Never read from or write to anything outside this repository. No scratch
+files, probes, downloads, logs, workspaces, lock files or build output in
+`/tmp`, `~`, or any sibling directory — a sibling checkout of retrolunar is
+not an exception and is not a source of truth about recipes. Everything a
+task produces lives inside the repo — use `./nest/tmp/` for scratch and
+delete it when you are done.
 
 ## Layout
 
-- `packages/<name>/source.lua` — fetch recipe: downloads and unpacks
+- `<name>/source.lua` — fetch recipe: downloads and unpacks
   upstream sources, copies the tree to `$OUT/<name>/`. Runs under the
   `source` pseudo-system, lands in `$NESTDIR/source/<name>/`.
-- `packages/<name>/generic.lua` — fallback build recipe when the package has
+- `<name>/generic.lua` — fallback build recipe when the package has
   no recipe for the requested system. It runs for that requested system; it
   is not a separate target system.
-- `packages/<sys>/generic.lua` — system description: a `system({setup=...})`
+- `<sys>/generic.lua` — system description: a `system({setup=...})`
   call whose `setup` shell fragment defines the whole toolchain
-  environment. Systems live in the same `packages/` tree as packages.
-- `packages/<sys>/*.cmake`, `*.ini` — cmake toolchain / meson cross files
+  environment. Systems live in the same tree as packages, as a top-level
+  directory too.
+- `<sys>/*.cmake`, `*.ini` — cmake toolchain / meson cross files
   shipped next to the system recipe, referenced via `$SYSDIR`.
-- `./nest` — build output (gitignored). `$NESTDIR/<sys>/` is the install
-  prefix per system, `$NESTDIR/source/<name>/` holds unpacked sources,
-  `$NESTDIR/tmp/` holds per-package `WORK`/`OUT` stage dirs.
+- `<name>/stage1.md`, `stage2.md`, `stage3.md` — pipeline hand-off files
+  (see 'The package pipeline').
+- `./nest` — build output (gitignored, local to this repo). `$NESTDIR/<sys>/`
+  is the install prefix per system, `$NESTDIR/source/<name>/` holds unpacked
+  sources, `$NESTDIR/tmp/` holds per-package `WORK`/`OUT` stage dirs.
 
-- Before writing a recipe, check that `packages/<name>/` does not already
-  exist: `topackage.md` is a backlog, not an inventory, so a package can be
-  present (sdl2, for instance) without appearing in either list. Adding a
-  package means creating new files, never rewriting an existing recipe.
+- Before writing a recipe, check that `<name>/` does not already exist. A
+  directory is the inventory: check with `ls <name>` before creating
+  anything. Adding a package means creating new files, never rewriting an
+  existing recipe.
 
-## The loader (`src/loader.lua`)
+## The loader (the `retrolunar` tool's Lua loader)
 
 Three `require` forms:
 
-- `require("pack@sys")` — searches `packages/pack/sys.lua`, then the
+- `require("pack@sys")` — searches `<pack>/sys.lua`, then the
   requested system's `recipe_fallbacks` entries in order, then
-  `packages/pack/generic.lua`, else errors. The selected recipe runs with
+  `<pack>/generic.lua`, else errors. The selected recipe runs with
   `SYSTEM=sys`, so a fallback recipe still targets the requested system.
   `require("pack@native")` resolves `sys` to the compile-time
   `DEFAULT_SYSTEM` (`clang-native` by default, overridable with
@@ -160,7 +168,7 @@ return recipe({
   use it whenever upstream has no usable tarball (only git tags) or the
   tarball is known-incomplete (missing git submodules, like protobuf or
   onnx historically were). Pattern (fields `git`/`tag` become shell vars
-  via the emitter, see `packages/python/source.lua` which was fetch-by-git
+  via the emitter, see `python/source.lua` which was fetch-by-git
   from the start):
   ```lua
   return recipe({
@@ -206,15 +214,15 @@ Rules:
   (explicit always wins). `require("ownname@source")` pulls your sources,
   copied from `$NESTDIR/source/<name>/` (not `$OUT`).
 - Keep `generic.lua` system-neutral. Any flag, cache answer, or workaround
-  that is only correct for one target belongs in `packages/<name>/<sys>.lua`,
+  that is only correct for one target belongs in `<name>/<sys>.lua`,
   never in the generic fallback. Ship ONE file per *family*, not per target:
   every Android system lists `android` in its `recipe_fallbacks`, so
-  `packages/<name>/android.lua` is found for all of them, and a recipe for
-  one system is just `packages/<name>/<sys>.lua`. Never add a per-target
+  `<name>/android.lua` is found for all of them, and a recipe for
+  one system is just `<name>/<sys>.lua`. Never add a per-target
   copy of an Android recipe — the fallback already covers it.
 - When a rule describes the target system rather than one package (a libc
   fact, an Autoconf cache answer, a toolchain quirk), put it in
-  `packages/<sys>/generic.lua` next to the other environment variables, so
+  `<sys>/generic.lua` next to the other environment variables, so
   every package inherits it. Keep such lines commented with the reason.
   Examples: Android systems export `ac_cv_func_ffsl=yes` because Bionic
   defines `ffsl` inline and Autoconf's link probe cannot see it.
@@ -240,7 +248,7 @@ Rules:
   same: `make` already defaults to serial (bare `make` reports
   `MAKEFLAGS=[]`), so `-j1` there is about being explicit, while ninja
   does NOT default to serial, so the flag is load-bearing. A bare `make`
-  in a recipe is not a defect; a recipe that fans out is. (`packages/opencv/generic.lua`
+  in a recipe is not a defect; a recipe that fans out is. (`opencv/generic.lua`
   was the last recipe still using `-j$(nproc ...)`; it now uses
   `cmake --build build --parallel 1`. `make -j1` was once rejected as a
   correctness requirement across five packages, and the resulting
@@ -250,7 +258,7 @@ Rules:
   plus `cp`, never `sed -i`. That line is where upstream inputs end and
   our own build output begins — a `.pc` written by `cmake --install` into
   `$OUT` is an artifact we made, and the loader already rewrites that
-  same file for `$OUT`→`$PREFIX` (`src/loader.lua:454-468`), so a recipe
+  same file for `$OUT`→`$PREFIX` (the loader does this in `require_script`), so a recipe
   correcting a field in it is doing by hand what the loader does
   mechanically. What the no-patch rule forbids is editing a file that came
   *out of* the upstream tree — a source, a template, a `CMakeLists.txt` —
@@ -258,7 +266,7 @@ Rules:
   **Scope it tightly: `awk` is permitted only on a generated file under
   `$OUT`, never in `$WORK` and never in the unpacked upstream tree.** A
   bare "awk is allowed" would make text-hacking upstream the path of
-  least resistance. `packages/glog/generic.lua` is the worked example:
+  least resistance. `glog/generic.lua` is the worked example:
   `libglog.pc.in:11` is a literal `Cflags: -I${includedir}` with no
   `@variable@`, so no cmake option reaches it, and the recipe rewrites the
   *generated* `libglog.pc` in `$OUT` to add `-DGLOG_USE_GLOG_EXPORT`.
@@ -268,12 +276,12 @@ Rules:
   cmake out of its own NDK integration, so the `ANDROID` variable cmake
   derives from it is never set and an `if (ANDROID)` branch in the
   project's own `CMakeLists.txt` never fires. Set it explicitly in
-  `packages/<name>/<sys>.lua` — it is a platform fact, so it cannot live
+  `<name>/<sys>.lua` — it is a platform fact, so it cannot live
   in the system-neutral fallback (`-DANDROID=ON` in
-  `packages/glog/android.lua`). Then prove it is link-metadata-only:
+  `glog/android.lua`). Then prove it is link-metadata-only:
   build twice, with and without the flag, and `cmp` the archives. glog's
   are byte-identical, which is what licenses keeping the flag out of
-  `generic.lua`. `packages/glog/stage3.md` records the full evidence,
+  `generic.lua`. `glog/stage3.md` records the full evidence,
   including the archive sizes and the one cmake-internal side effect
   (`Compiler/Clang.cmake:84`), so a reader does not have to reproduce it.
 - Autotools timestamp guard after every `./configure` (tarball mtimes
@@ -327,14 +335,14 @@ Rules:
   `PKG_CONFIG_ALLOW_CROSS=1` + `RUSTFLAGS="-L $PREFIX/lib"`;
   libvpx configure wants `--extra-cflags="--sysroot=$SYSROOT"`, not
   `-isystem` (breaks libc++ include order) — that line lives in
-  `packages/libvpx/android.lua`; ffmpeg ignores `$CFLAGS`/`$LDFLAGS`, so
-  `packages/ffmpeg/android.lua` passes them as `--extra-cflags`/
+  `libvpx/android.lua`; ffmpeg ignores `$CFLAGS`/`$LDFLAGS`, so
+  `ffmpeg/android.lua` passes them as `--extra-cflags`/
   `--extra-ldflags`.
 - Meson recipes: pass `-Ddefault_library=static` (meson builds shared by
   default, and a target prefix has no loader path for a versioned object),
   and do **not** add `DESTDIR` to the install step — `$MESON_FLAGS` already
   carries `--prefix=$OUT`, so `DESTDIR=$OUT ninja install` writes to
-  `$OUT$OUT`. `packages/fribidi/generic.lua` is the worked example.
+  `$OUT$OUT`. `fribidi/generic.lua` is the worked example.
 - On Android the *compiler* is the source of truth, not the build system:
   the NDK's API-level wrappers predefine `__ANDROID__` and
   `__ANDROID_MIN_SDK_VERSION__` (the API level itself). A project that
@@ -466,16 +474,16 @@ packages were marked done and had been surviving on lucky mtimes.
 
 ### Role 1 — adder
 
-Picks packages off `topackage.md` (the LFS checklist plus the curated
-C/C++ candidate lists per platform) and writes, for each:
+Picks packages off the backlog the user names (the LFS checklist plus the
+curated C/C++ candidate lists per platform) and writes, for each:
 
-- `packages/<name>/source.lua`
-- `packages/<name>/generic.lua`
-- `packages/<name>/android.lua` only when an Android-only switch is
+- `<name>/source.lua`
+- `<name>/generic.lua`
+- `<name>/android.lua` only when an Android-only switch is
   genuinely needed. Android systems declare `recipe_fallbacks =
   {"android"}`, so one `android.lua` covers every Android target; never
   write a per-target copy.
-- `packages/<name>/stage1.md` — the build forecast.
+- `<name>/stage1.md` — the build forecast.
 
 `stage1.md` carries one verdict row per system family: `aarch64-android21`,
 `aarch64-android24`, `aarch64-android35`, `x86_64-android35`,
@@ -492,7 +500,7 @@ anything.
 
 ### Role 2 — reviewer
 
-Reads the recipes plus `stage1.md` and writes `packages/<name>/stage2.md`.
+Reads the recipes plus `stage1.md` and writes `<name>/stage2.md`.
 The first line is exactly `ACCEPT` or `REJECT`.
 
 Two questions decide it:
@@ -549,7 +557,7 @@ citation is a finding. A forecast that contradicts the recipe is a REJECT.
 ### Role 3 — builder
 
 Builds only what reviewers accepted, on the system where it will most
-certainly build, writes `packages/<name>/stage3.md` with the real build log
+certainly build, writes `<name>/stage3.md` with the real build log
 and any errors, and commits — one commit per package, with the stage1/2/3
 files included, following the commit rules in 'Workflow'. A failed build is
 still committed: the failure text is the deliverable.
@@ -588,7 +596,7 @@ one file turns a correct count into a phantom defect. `grep -c '^nl-'`
 looks correctly scoped and returns 5 for libnl's 6 man pages, the sixth
 being `genl-ctrl-list.8`.
 Five such checks sat in this tree until one `grep` across
-`packages/*/stage*.md` for globs feeding `wc -l` and for count expectations
+`*/stage*.md` for globs feeding `wc -l` and for count expectations
 found them all; that audit takes minutes, so run it after every build wave
 rather than once.
 
@@ -659,8 +667,7 @@ forecast and a review at each hand-off. The rest of this section describes
 the plain single-agent path, which is what an update or a fix needs.
 
 ```sh
-ninja -C builddir retrolunar          # rebuild after loader/C changes
-./builddir/retrolunar install --nest ./nest --packages ./packages 'pkg@sys' > build.sh
+retrolunar install --nest ./nest --packages . 'pkg@sys' > build.sh
 sh -n build.sh                        # syntax gate, always
 ANDROID_HOME=/path/to/sdk sh build.sh # NDK systems need this
 ```
