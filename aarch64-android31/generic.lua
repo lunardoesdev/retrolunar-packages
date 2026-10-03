@@ -159,5 +159,17 @@ return system({
         export PKG_CONFIG_ALLOW_CROSS
         export CC_aarch64_linux_android CFLAGS_aarch64_linux_android
         export CXX_aarch64_linux_android CXXFLAGS_aarch64_linux_android
+
+        # --- build parallelism ---
+        # How many jobs a build may use. retrolunar will export CORES itself
+        # in the future; until then it comes from the environment and falls
+        # back to 1, so a build is serial unless the caller asked otherwise.
+        # Recipes pass it to their build tool (`make -j"$CORES"`,
+        # `cmake --build ... --parallel "$CORES"`, `ninja -j "$CORES"`,
+        # `meson compile --jobs "$CORES"`). MAKEFLAGS covers bare `make`,
+        # including recursive submakes that never see the recipe line.
+        CORES="${CORES:-1}"
+        MAKEFLAGS="-j$CORES"
+        export CORES MAKEFLAGS
     ]],
 })
