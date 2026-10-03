@@ -386,69 +386,35 @@ A system file requires it with `require("i686-w64-mingw32-gcc@native")`,
 which lands the binaries in `$NESTDIR/<DEFAULT_SYSTEM>/bin` — the prefix the
 emitter already puts first on `PATH` for every package block.
 
-### Building a cross toolchain without building a compiler
+### The two MinGW systems
 
-`i686-w64-mingw32` is the worked example, and the general shape is: when
-clang already knows the target triple, the only thing missing is the
-**runtime**, and the runtime is a small C library rather than a compiler.
-What that saves is the whole `binutils` + `gcc` build.
+`mingw32` (i686) and `x86_64-mingw` (x86_64) are the same recipe with
+different tool names, and that is the point: a third one would be a copy
+again. Both take their tools from `PATH` — the host's mingw-w64 — with no
+sysroot and no NDK discovery, and both ship a cmake toolchain file and a
+meson crossfile next to `generic.lua`. What differs between them is the
+triplet, `HOST_ARCH`, and the `i686-*` / `x86_64-*` prefix on every tool.
 
-- `clang --target=<triple>` compiles. The triple is built into clang, so no
-  target-specific compiler package is needed. `clang -print-targets`
-  confirms what a given clang covers.
-- `lld` links PE/COFF and ELF. `llvm-dlltool` turns `.def` files into import
-  libraries; mingw-w64's CRT ships the `.def` files, so import libraries
-  need no separate toolchain.
-- What clang cannot supply is what GCC's toolchain would have: the CRT
-  startup objects, and two compiler-support objects.
-  - **`crtbegin`** — mingw-w64 ships `crt/crtbegin.c` *empty*, because GCC
-    normally provides `crtbegin.o` with the global constructor/destructor
-    lists. The CRT references them (`crt/gccmain.c:12-13`), so every link
-    fails on `undefined symbol: ___CTOR_LIST__`. Note **three** leading
-    underscores: COFF decorates a leading underscore, so the C name
-    `__CTOR_LIST__` becomes `___CTOR_LIST__`.
-  - **`__alloca`** — clang's x86 back end emits a relocation against
-    `__alloca` for the stack probe in any function with a dynamic `alloca`;
-    GCC's libgcc normally provides it. Confirm with
-    `llvm-readobj --relocations`.
-  - **`-lgcc`/`-lgcc_eh`** — clang's mingw driver ends *every* link with
-    these two names and fails with `unable to find library -lgcc` when they
-    are absent. Copies of the two archives above satisfy it. They must
-    contain the shims, not be empty: an empty `-lgcc` satisfies the driver
-    and leaves `__alloca` undefined at link time instead.
+That "tools come from PATH" is a deliberate simplification, not an
+oversight: the alternative is packaging a mingw-w64 CRT, and that is a
+large amount of build time and a standing compatibility burden for output
+the host toolchain already provides correctly. Reach for a packaged
+toolchain only when the host genuinely cannot supply the target.
 
-The shims are new files the recipe writes with `cat` heredocs, not patches
-to upstream — they are our toolchain's support objects, and putting them in
-the package that builds the runtime keeps the system file to configuration.
+### `.exe` on both MinGW systems
 
-## Targeting an old Windows (`mingw32`)
+The mingw driver appends `.exe` to whatever `-o` names, so `-o bzip2`
+produces `bzip2.exe`. This is true of `x86_64-w64-mingw32-gcc` and
+`i686-w64-mingw32-gcc` alike — it is a property of the driver, not of any
+one system, so the same trap waits on both.
 
-"Windows XP" is a set of independent constraints, and **every one of them
-fails silently**. A binary that breaks on XP builds clean here and dies on
-the target, which is why each is worth a line in the system file:
-
-- **msvcrt, never ucrt.** mingw-w64 defaults `--with-default-msvcrt` to
-  `ucrt` (`mingw-w64-crt/configure.ac:256-266`). XP has no UCRT.
-- **`_WIN32_WINNT=0x501`.** The headers default it to `0xa00`
-  (`mingw-w64-headers/configure.ac:127-135`), so they *declare* interfaces
-  XP does not have. The build succeeds; the binary fails to load.
-- **PE subsystem version `5.1`.** Omit it and lld writes `6.0`, which XP
-  refuses. Nothing warns at build time.
-- **No SafeSEH.** It postdates XP. Note there is no flag for it on the GNU
-  driver path: `-Wl,-safeseh:no`, `--safeseh:no` and `-fno-safeseh` are each
-  rejected, and the driver does not enable SafeSEH by default anyway. Only a
-  direct `lld-link` invocation needs `-safeseh:no`, which is why the system
-  file carries no such flag and no recipe calls `$LD` directly.
-- **Verify statically.** `file bin/x` printing
-  `PE32 executable for MS Windows 5.01` is the check; so is
-  `llvm-readobj --coff-imports` for a post-XP API name.
-- **`.exe` suffix.** The driver appends `.exe` to whatever `-o` names, so
-  `-o bzip2` produces `bzip2.exe`. A hand-written Makefile whose install
-  rule hardcodes the bare name then fails with `cannot stat 'bzip2'`, and
-  there is often no `EXEEXT` variable to set — `bzip2/Makefile` has none,
-  and ships no configure to inject one. Copy the file onto the name the
-  rule wants rather than reimplementing the install target in the recipe;
-  `bzip2/generic.lua` is the worked example.
+A hand-written Makefile whose install rule hardcodes the bare name then
+dies with `cannot stat 'bzip2'`, which reads like a missing build output
+rather than a filename mismatch. There is often no `EXEEXT` to set:
+`bzip2/Makefile` has none and ships no configure to inject one. Copy the
+file onto the name the rule wants rather than reimplementing the install
+target in the recipe — `bzip2/generic.lua` is the worked example, and it is
+what made bzip2 build on `x86_64-mingw` at all; it had never built there.
 
 ## Writing a system (`<sys>/generic.lua`)
 
@@ -711,7 +677,8 @@ shards so two or three adders never write the same file, and skip any
 directory that already has a stage file so nobody duplicates themselves.
 
 A system directory is not a package. Names matching `*-android<number>`,
-plus `x86_64-mingw` and `clang-native`, are systems and get no stage files.
+plus `x86_64-mingw`, `mingw32` and `clang-native`, are systems and get no
+stage files.
 
 Do not use "has a source.lua" as a membership test: a package may have only
 a `generic.lua` (pngprobe does).
