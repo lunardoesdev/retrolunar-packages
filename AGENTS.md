@@ -388,7 +388,7 @@ emitter already puts first on `PATH` for every package block.
 
 ### The two MinGW systems
 
-`mingw32` (i686) and `x86_64-mingw` (x86_64) are the same recipe with
+`i686-mingw` (i686) and `x86_64-mingw` (x86_64) are the same recipe with
 different tool names, and that is the point: a third one would be a copy
 again. Both take their tools from `PATH` — the host's mingw-w64 — with no
 sysroot and no NDK discovery, and both ship a cmake toolchain file and a
@@ -677,7 +677,7 @@ shards so two or three adders never write the same file, and skip any
 directory that already has a stage file so nobody duplicates themselves.
 
 A system directory is not a package. Names matching `*-android<number>`,
-plus `x86_64-mingw`, `mingw32` and `clang-native`, are systems and get no
+plus `x86_64-mingw`, `i686-mingw` and `clang-native`, are systems and get no
 stage files.
 
 Do not use "has a source.lua" as a membership test: a package may have only
