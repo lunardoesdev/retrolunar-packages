@@ -22,7 +22,7 @@ return recipe({
             assert!(ver >= 10648, "unexpected libpng version: {ver}");
         }
         EOF
-        PNG_CONFIG="false" cargo build --release --target "$CARGO_BUILD_TARGET"
+        PNG_CONFIG="false" cargo build --release --target "$CARGO_BUILD_TARGET" -j "$CORES"
         _bin="target/$CARGO_BUILD_TARGET/release/pngprobe"
         [ -f "$_bin" ] || _bin="$_bin.exe"
         if ! "$OBJDUMP" -p "$_bin" | grep -qi "libpng16"; then

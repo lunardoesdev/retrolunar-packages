@@ -245,7 +245,8 @@ Rules:
   system exports (`CORES="${CORES:-1}"`, `MAKEFLAGS="-j$CORES"`), so a build
   is serial unless the caller asked for more. Write
   `make -j"$CORES"`, `cmake --build build --parallel "$CORES"`,
-  `ninja -C build -j "$CORES"`, `meson compile -C build --jobs "$CORES"`.
+  `ninja -C build -j "$CORES"`, `meson compile -C build --jobs "$CORES"`,
+  `cargo build -j "$CORES"`.
   A recipe that writes a literal `-j1`, `--parallel 1`, `--jobs 1` or
   `-j$(nproc)` is the defect — the count is a system fact, not a recipe one.
   A bare `make` needs no flag of its own: `$MAKEFLAGS` carries `-j"$CORES"`
