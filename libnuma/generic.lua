@@ -14,7 +14,7 @@ return recipe({
         # numademo, migratepages, migspeed, memhog) are host tools. Build the
         # library on its own, then install only the library, the public
         # headers and numa.pc; the man pages belong to the tools.
-        make -j1 libnuma.la
-        make -j1 install-libLTLIBRARIES install-includeHEADERS install-pkgconfigDATA
+        make -j"$CORES" libnuma.la
+        make -j"$CORES" install-libLTLIBRARIES install-includeHEADERS install-pkgconfigDATA
     ]]
 })

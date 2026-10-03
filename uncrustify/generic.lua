@@ -30,7 +30,7 @@ return recipe({
         # version machinery, which is why there is no -DNoGitVersionString
         # here: the upstream default is the path designed for this case.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_TESTING=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

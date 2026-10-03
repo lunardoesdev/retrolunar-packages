@@ -49,7 +49,7 @@ return recipe({
             -Dman1dir=$OUT/share/man/man1 \
             -Dman3dir=$OUT/share/man/man3 \
             -Dusethreads
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

@@ -35,7 +35,7 @@ return recipe({
         # on mingw because CMake sets WIN32 for MinGW. Recorded as
         # WILL NOT BUILD in stage1.md; no workaround is invented here.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

@@ -33,7 +33,7 @@ return recipe({
         # (CMakeLists.txt:9); passed explicitly because a target prefix has
         # no loader path for a versioned object.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_X11=OFF -DGLFW_BUILD_WAYLAND=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

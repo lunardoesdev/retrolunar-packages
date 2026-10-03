@@ -27,7 +27,7 @@ return recipe({
             -DJAS_ENABLE_PROGRAMS=OFF \
             -DJAS_ENABLE_DOC=OFF \
             -DJAS_ENABLE_LATEX=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

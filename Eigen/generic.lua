@@ -27,7 +27,7 @@ return recipe({
         # which is why this recipe runs upstream's own install rather than
         # copying headers by hand.
         cmake -S . -B build $CMAKE_FLAGS -DEIGEN_BUILD_TESTING=OFF -DEIGEN_BUILD_DOC=OFF -DEIGEN_BUILD_DEMOS=OFF -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF -DEIGEN_BUILD_BTL=OFF -DEIGEN_BUILD_SPBENCH=OFF -DEIGEN_BUILD_PKGCONFIG=ON -DEIGEN_BUILD_CMAKE_PACKAGE=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

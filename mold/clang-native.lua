@@ -31,7 +31,7 @@ return recipe({
         # vendored third-party/mimalloc. That is an allocator choice, not a
         # requirement, so it is off to keep the build to mold itself.
         cmake -S . -B build $CMAKE_FLAGS -DMOLD_USE_MIMALLOC=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         # The plain install target, not --target install: CMakeLists.txt:
         # 484-501 installs relative symlinks (ld.mold, libexec/mold/ld)
         # through install(CODE) blocks that call file(RELATIVE_PATH)

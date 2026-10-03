@@ -20,7 +20,7 @@ return recipe({
         # lib/cmake/plog/, and README.md + LICENSE. No library file and no
         # pkg-config file - upstream ships neither.
         cmake -S . -B build $CMAKE_FLAGS -DPLOG_BUILD_SAMPLES=OFF -DPLOG_BUILD_TESTS=OFF -DPLOG_INSTALL=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

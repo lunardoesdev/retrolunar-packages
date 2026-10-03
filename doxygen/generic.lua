@@ -31,7 +31,7 @@ return recipe({
         # ExternalProject anywhere in the build, so no network is touched at
         # build time.
         cmake -S . -B build $CMAKE_FLAGS -Dbuild_wizard=OFF -Dbuild_doc=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

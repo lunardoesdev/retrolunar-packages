@@ -8,7 +8,7 @@ return recipe({
         # Nothing is compiled, so no toolchain, no sysroot, no cross
         # compiler: a header-only package is the same on every system.
         cmake -S . -B build $CMAKE_FLAGS -DJSON_BuildTests=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

@@ -33,7 +33,7 @@ return recipe({
         find . -name 'Makefile.in' | xargs touch
         # Native, so magic/Makefile.am uses $(top_builddir)/src/file and runs
         # it - a host binary, which is fine here. See the note at the top.
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

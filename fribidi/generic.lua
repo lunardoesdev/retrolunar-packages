@@ -11,7 +11,7 @@ return recipe({
         # meson's --prefix is already $OUT, and DESTDIR would concatenate the
         # two into $OUT$OUT.
         meson setup build $MESON_FLAGS -Dbuildtype=release -Ddefault_library=static -Dtests=false -Ddocs=false -Dbin=false
-        ninja -C build
-        ninja -C build install
+        ninja -C build -j "$CORES"
+        ninja -C build -j "$CORES" install
     ]]
 })

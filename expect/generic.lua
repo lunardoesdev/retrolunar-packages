@@ -53,12 +53,12 @@ return recipe({
         # the guard exists to prevent live.
         touch aclocal.m4 configure
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         # TCLSH_PROG= on the make line is the whole fix for the interpreter:
         # Makefile.in:172 makes it an ordinary '=' variable, so a command-line
         # assignment overrides the configured value and leaves TCL_LIB_SPEC and
         # TCL_INCLUDES alone. tcl@native installs its interpreter as
         # bin/tclsh8.6 (tcl/unix/Makefile.in:816).
-        make -j1 install TCLSH_PROG="$NATIVE_PREFIX/bin/tclsh8.6"
+        make -j"$CORES" install TCLSH_PROG="$NATIVE_PREFIX/bin/tclsh8.6"
     ]]
 })

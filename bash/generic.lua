@@ -24,7 +24,7 @@ return recipe({
         CC_FOR_BUILD="cc" CFLAGS_FOR_BUILD="-std=gnu17" ./configure $AUTOCONF_CONFIGURE_FLAGS --without-bash-malloc --with-installed-readline
         touch aclocal.m4 configure config.h.in buildconf.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

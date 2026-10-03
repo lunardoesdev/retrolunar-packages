@@ -19,7 +19,7 @@ return recipe({
             --enable-default-hash-style=gnu
         touch aclocal.m4 configure config.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1 tooldir="$OUT"
-        make -j1 tooldir="$OUT" install
+        make -j"$CORES" tooldir="$OUT"
+        make -j"$CORES" tooldir="$OUT" install
     ]]
 })

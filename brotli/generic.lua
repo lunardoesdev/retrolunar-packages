@@ -8,7 +8,7 @@ return recipe({
         # too; their zopfli path calls log2(), which links because the
         # system's LDFLAGS already carry -lm for Bionic.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

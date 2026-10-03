@@ -12,7 +12,7 @@ return recipe({
         ./configure $AUTOCONF_CONFIGURE_FLAGS --disable-shared --enable-static --with-zlib="$PREFIX" --without-libpsl --without-libidn2 --without-nghttp2 --without-nghttp3 --without-libssh2 --disable-ldap --disable-ldaps --disable-rtsp --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smtp --disable-gopher --disable-mqtt --disable-docs
         touch aclocal.m4 configure lib/curl_config.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1 -C lib
+        make -j"$CORES" -C lib
         # Install only the library, the public headers and the .pc. The
         # top-level 'make install' would also install bin/curl, the curl
         # config script and the docs, none of which belong in a target prefix.

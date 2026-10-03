@@ -39,7 +39,7 @@ return recipe({
         # distcc builds no host programs and runs none: check_PROGRAMS and
         # check_include_server_PY (Makefile.in:427, :441) are built only by
         # `make check`, which this recipe never runs.
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

@@ -32,7 +32,7 @@ return recipe({
         # symbolizer, needs no extra library, and is what makes
         # --symbolize_full stack traces work.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DWITH_GFLAGS=OFF -DWITH_GTEST=OFF -DWITH_GMOCK=OFF -DWITH_PKGCONFIG=ON -DWITH_UNWIND=none
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
         # libglog.pc's Cflags is a genuine upstream packaging defect, on
         # every system, not an Android artifact. libglog.pc.in:11 is a

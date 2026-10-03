@@ -40,7 +40,7 @@ return recipe({
         # (configure.ac:147, rule at doc/Makefile.in:323), so `make install`
         # finds it without fig2dev. Nothing in `make` needs to execute a
         # built program.
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

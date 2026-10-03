@@ -54,7 +54,7 @@ return recipe({
             -DWITH_UPNP=OFF \
             -DWITH_GIT_VERSION=OFF \
             -DBUILD_TESTING=OFF
-        cmake --build cmakebuild --parallel 1
+        cmake --build cmakebuild --parallel "$CORES"
         cmake --install cmakebuild
 
         mkdir -p $OUT/etc/i2pd/tunnels.conf.d

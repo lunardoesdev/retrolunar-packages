@@ -18,7 +18,7 @@ return recipe({
         # configure and resets every timestamp, so the next pass wants to
         # rebuild aclocal.m4 again and asks for aclocal-1.17.
         touch config.status libtool
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

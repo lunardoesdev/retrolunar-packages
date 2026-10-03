@@ -42,7 +42,7 @@ return recipe({
         # TBB_INSTALL stays ON (:128); the install rules at :313-350 and
         # add_subdirectory(cmake/post_install) at :414 depend on it.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DTBB_TEST=OFF -DTBB_STRICT=OFF -DTBB_ENABLE_IPO=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

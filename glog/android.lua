@@ -73,7 +73,7 @@ return recipe({
         # because CMAKE_ANDROID_NDK_VERSION is unset; glog does not enable
         # IPO, so that variable is never read.
         cmake -S . -B build $CMAKE_FLAGS -DANDROID=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DWITH_GFLAGS=OFF -DWITH_GTEST=OFF -DWITH_GMOCK=OFF -DWITH_PKGCONFIG=ON -DWITH_UNWIND=none
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
         # Same staged-.pc edit as generic.lua, for the same reason (there:
         # libglog.pc.in's Cflags line has no @variable@, so cmake cannot put

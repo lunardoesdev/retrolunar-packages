@@ -8,7 +8,7 @@ return recipe({
         # upstream's default -- which keeps tinyexr self-contained, at the
         # cost of shipping miniz alongside it (see the copy list below).
         cmake -S . -B build $CMAKE_FLAGS -DTINYEXR_BUILD_SAMPLE=OFF -DTINYEXR_USE_MINIZ=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         # tinyexr's CMakeLists.txt has NO install() rules at all (verified:
         # grep for "install" returns nothing, and `cmake --install` exits 0
         # without even creating the prefix), so the install is done here with

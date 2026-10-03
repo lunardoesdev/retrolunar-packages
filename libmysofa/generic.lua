@@ -31,7 +31,7 @@ return recipe({
         # include(FindZLIB) at src/CMakeLists.txt:12 resolves it through
         # $CMAKE_PREFIX_PATH, which $CMAKE_FLAGS already points at $PREFIX.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_LIBS=ON -DBUILD_TESTS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

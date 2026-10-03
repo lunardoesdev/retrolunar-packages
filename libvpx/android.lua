@@ -22,7 +22,7 @@ return recipe({
           --disable-tools --enable-pic --enable-static --disable-shared \
           --extra-cflags="--sysroot=$SYSROOT" \
           --extra-cxxflags="--sysroot=$SYSROOT"
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

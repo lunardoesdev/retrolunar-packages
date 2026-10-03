@@ -12,7 +12,7 @@ return recipe({
         # release: this prefix ships optimised static libraries and does not
         # carry the debug info a debug build would add.
         meson setup build $MESON_FLAGS -Dbuildtype=release -Ddefault_library=static -Dtests=disabled -Ddocs=disabled -Dutilities=disabled -Dintrospection=disabled -Dfreetype=enabled -Dglib=disabled -Dgobject=disabled -Dcairo=disabled -Dicu=disabled -Dgraphite=disabled
-        ninja -C build --parallel 1
-        ninja -C build install
+        ninja -C build -j "$CORES"
+        ninja -C build -j "$CORES" install
     ]]
 })

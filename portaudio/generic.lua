@@ -36,7 +36,7 @@ return recipe({
         # (CMakeLists.txt:478, :484); stated here so a future default flip
         # cannot start compiling host programs.
         cmake -S . -B build $CMAKE_FLAGS -DPA_BUILD_STATIC=ON -DPA_BUILD_SHARED=OFF -DPA_USE_ALSA=OFF -DPA_USE_JACK=OFF -DPA_BUILD_TESTS=OFF -DPA_BUILD_EXAMPLES=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

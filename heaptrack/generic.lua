@@ -24,7 +24,7 @@ return recipe({
         # Expect `find_package(Qt6 ... REQUIRED)` to fail here. That is the
         # recorded blocker, not a defect in this recipe.
         cmake -S . -B build $CMAKE_FLAGS
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

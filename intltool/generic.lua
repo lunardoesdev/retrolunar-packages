@@ -12,7 +12,7 @@ return recipe({
         ./configure $AUTOCONF_CONFIGURE_FLAGS
 touch aclocal.m4 configure
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

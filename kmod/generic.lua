@@ -20,7 +20,7 @@ return recipe({
             -Dmanpages=false \
             -Dxz=enabled \
             -Dzstd=disabled
-        meson compile -C build --jobs 1
+        meson compile -C build --jobs "$CORES"
         # No DESTDIR: meson's --prefix is already $OUT (it comes from
         # $MESON_FLAGS), so DESTDIR would concatenate the two and the
         # install would land in $OUT$OUT.

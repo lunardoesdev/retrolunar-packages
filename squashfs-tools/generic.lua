@@ -31,7 +31,7 @@ return recipe({
         # target binary is exactly what this repo never does. "y" takes the
         # pre-built pages in Documentation/manpages instead.
         # INSTALL_PREFIX: Makefile:174-176 default to /usr/local.
-        make -j1 LZO_SUPPORT=0 USE_PREBUILT_MANPAGES=y INSTALL_PREFIX="$OUT"
-        make -j1 LZO_SUPPORT=0 USE_PREBUILT_MANPAGES=y INSTALL_PREFIX="$OUT" install
+        make -j"$CORES" LZO_SUPPORT=0 USE_PREBUILT_MANPAGES=y INSTALL_PREFIX="$OUT"
+        make -j"$CORES" LZO_SUPPORT=0 USE_PREBUILT_MANPAGES=y INSTALL_PREFIX="$OUT" install
     ]]
 })

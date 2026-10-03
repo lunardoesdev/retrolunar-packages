@@ -49,8 +49,8 @@ return recipe({
             --enable-libdebuginfod=dummy
         touch aclocal.m4 configure config.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1 -C libelf
-        make -j1 -C libelf install
+        make -j"$CORES" -C libelf
+        make -j"$CORES" -C libelf install
         mkdir -p $OUT/lib/pkgconfig
         cp config/libelf.pc $OUT/lib/pkgconfig/
     ]]

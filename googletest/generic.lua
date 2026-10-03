@@ -12,7 +12,7 @@ return recipe({
         # a build-tree path affecting no install rule, so it costs nothing.)
         # googletest's and gmock's own tests are host programs and stay off.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

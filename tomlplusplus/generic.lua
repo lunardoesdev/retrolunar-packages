@@ -7,7 +7,7 @@ return recipe({
         # and toml.h and generates the CMake package config. Tests off; they
         # are a host C++ suite.
         cmake -S . -B build $CMAKE_FLAGS -DTOMLPLUSPLUS_BUILD_TESTS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

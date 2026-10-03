@@ -20,7 +20,7 @@ return recipe({
         # packaging steps with no meaning for a target prefix. With it off the
         # build returns at line 87-89 before CPack is included.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_TESTING=OFF -DEXPECTED_BUILD_TESTS=OFF -DEXPECTED_BUILD_PACKAGE=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

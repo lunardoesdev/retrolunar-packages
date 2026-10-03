@@ -10,7 +10,7 @@ return recipe({
         # nanopb_BUILD_GENERATOR is off. The runtime part is the only part a
         # target prefix can use.
         cmake -S . -B build $CMAKE_FLAGS -Dnanopb_BUILD_GENERATOR=OFF -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

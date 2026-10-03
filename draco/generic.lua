@@ -8,7 +8,7 @@ return recipe({
         # upstream keeps its build options sparse: tests off is the only thing
         # worth switching off here, the tests are a large gtest suite.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DDRACO_TESTS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

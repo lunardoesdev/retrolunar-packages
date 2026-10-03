@@ -14,7 +14,7 @@ return recipe({
         find . -name 'configure' | xargs touch
         find . -name 'aclocal.m4' | xargs touch
         find . -name 'Makefile.in' | xargs touch
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

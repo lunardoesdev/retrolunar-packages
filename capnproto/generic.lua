@@ -82,7 +82,7 @@ return recipe({
         # libcapnpc.a (which IS installed) is the plugin half of a toolchain
         # whose driver half is absent. Consumers generate code with a host
         # capnp.
-        make -j1 install-libLTLIBRARIES
-        make -j1 install-data
+        make -j"$CORES" install-libLTLIBRARIES
+        make -j"$CORES" install-data
     ]]
 })

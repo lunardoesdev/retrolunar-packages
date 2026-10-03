@@ -48,7 +48,7 @@ return recipe({
         # not by a build-system variable, so there is no Android-only switch
         # for a recipe to set.
         cmake -S . -B build $CMAKE_FLAGS -DPHYSFS_BUILD_STATIC=ON -DPHYSFS_BUILD_SHARED=OFF -DPHYSFS_BUILD_TEST=OFF -DPHYSFS_BUILD_DOCS=OFF -DPHYSFS_DISABLE_INSTALL=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

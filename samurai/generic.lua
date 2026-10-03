@@ -30,8 +30,8 @@ return recipe({
         # at build.c:240,247,589. glibc and Bionic both provide it; mingw-w64
         # does not, which is the one platform wall. See stage1.md.
         #
-        # `make` already defaults to serial (bare `make` reports MAKEFLAGS=[]),
-        # so the build never fans out.
+        # No -j on the line: $MAKEFLAGS from the system already carries
+        # -j"$CORES", which reaches this make and its submakes.
         make
         # Makefile:5-7 derive BINDIR/MANDIR from PREFIX, and Makefile:50-53
         # mkdir -p them under $(DESTDIR). Passing PREFIX=$OUT is therefore

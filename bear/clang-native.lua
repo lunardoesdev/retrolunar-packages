@@ -29,7 +29,7 @@ return recipe({
         cmake -S . -B build $CMAKE_FLAGS \
             -DENABLE_UNIT_TESTS=OFF \
             -DENABLE_FUNC_TESTS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

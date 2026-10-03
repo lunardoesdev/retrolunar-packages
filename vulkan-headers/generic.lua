@@ -48,7 +48,7 @@ return recipe({
         # include/vulkan/vulkan_core.h (:64, 364) to version the project; it
         # never writes a header back. The tree is copied verbatim.
         cmake -S . -B build $CMAKE_FLAGS -DVULKAN_HEADERS_ENABLE_TESTS=OFF -DVULKAN_HEADERS_ENABLE_INSTALL=ON -DVULKAN_HEADERS_ENABLE_MODULE=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

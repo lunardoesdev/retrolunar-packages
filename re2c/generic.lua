@@ -31,7 +31,7 @@ return recipe({
         # also default OFF. No DESTDIR: $MESON_FLAGS-style --prefix=$OUT is
         # already inside $CMAKE_FLAGS.
         cmake -S . -B build $CMAKE_FLAGS -DRE2C_BUILD_TESTS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

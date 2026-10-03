@@ -50,7 +50,7 @@ return recipe({
         # guard holds. It is not installed. Nothing in the recipe can turn it
         # off, and nothing needs to: it neither runs nor installs.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DHWY_ENABLE_CONTRIB=ON -DHWY_ENABLE_INSTALL=ON -DHWY_ENABLE_TESTS=OFF -DHWY_ENABLE_EXAMPLES=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

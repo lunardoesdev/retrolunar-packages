@@ -40,7 +40,7 @@ return recipe({
         # 1402 and 1408). Dropping it would give a library that silently
         # loses spatial audio.
         cmake -S . -B build $CMAKE_FLAGS -DLIBTYPE=STATIC -DALSOFT_UTILS=OFF -DALSOFT_EXAMPLES=OFF -DALSOFT_INSTALL_EXAMPLES=OFF -DALSOFT_INSTALL_UTILS=OFF -DALSOFT_INSTALL_CONFIG=OFF -DALSOFT_BUILD_IMPORT_LIB=OFF -DALSOFT_UPDATE_BUILD_VERSION=OFF -DALSOFT_INSTALL_HRTF_DATA=ON -DALSOFT_INSTALL_AMBDEC_PRESETS=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

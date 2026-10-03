@@ -45,7 +45,7 @@ return recipe({
             -Dxft=disabled -Dlibthai=disabled -Dsysprof=disabled \
             -Dintrospection=disabled -Ddocumentation=false -Dman-pages=false \
             -Dbuild-testsuite=false -Dbuild-examples=false
-        ninja -C build --parallel 1
-        ninja -C build install
+        ninja -C build -j "$CORES"
+        ninja -C build -j "$CORES" install
     ]]
 })

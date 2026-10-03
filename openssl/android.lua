@@ -28,7 +28,7 @@ return recipe({
             *) echo "openssl: unknown HOST_ARCH $HOST_ARCH" >&2; exit 1 ;;
         esac
         ./Configure "$ssl_target" -D__ANDROID_API__="$ANDROID_API" --prefix="$OUT" --libdir=lib no-shared no-tests no-docs no-engine no-dso no-dynamic-engine
-        make -j1
+        make -j"$CORES"
         make install_sw
     ]]
 })

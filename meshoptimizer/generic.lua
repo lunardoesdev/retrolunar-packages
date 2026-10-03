@@ -11,7 +11,7 @@ return recipe({
         # and this prefix is for the library. MESHOPT_INSTALL=ON pulls in the
         # header and the package config.
         cmake -S . -B build $CMAKE_FLAGS -DMESHOPT_BUILD_DEMO=OFF -DMESHOPT_BUILD_GLTFPACK=OFF -DMESHOPT_INSTALL=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

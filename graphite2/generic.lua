@@ -22,7 +22,7 @@ return recipe({
         # requires GCC or Clang (CMakeLists.txt:63), which every system in
         # this tree has.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

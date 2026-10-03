@@ -32,7 +32,7 @@ return recipe({
         # optional; it only enables xjson.hpp, which is not in the
         # single-include list (lines 331-335).
         cmake -S . -B build $CMAKE_FLAGS
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

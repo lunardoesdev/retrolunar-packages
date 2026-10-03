@@ -34,7 +34,7 @@ return recipe({
         # configure.ac:992 configures man/GNUmakefile, so it is named here.
         touch aclocal.m4 configure config.h.in man/GNUmakefile.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

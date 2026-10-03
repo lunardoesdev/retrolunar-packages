@@ -68,7 +68,7 @@ return recipe({
         # Bionic. Off everywhere also keeps one artifact across all families.
         # It is upstream's own switch (CMakeLists.txt:77).
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTS=OFF -DBUILD_CLI=OFF -DBUILD_EXAMPLES=OFF -DBUILD_FUZZERS=OFF -DUSE_SSH=OFF -DUSE_HTTPS=OpenSSL -DUSE_BUNDLED_ZLIB=OFF -DREGEX_BACKEND=pcre2 -DUSE_ICONV=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

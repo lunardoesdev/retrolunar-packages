@@ -17,7 +17,7 @@ return recipe({
         # (The probe succeeds on all our toolchains, so without this flag every
         # system would land in C23 mode.)
         cmake -S . -B build $CMAKE_FLAGS -DWITH_EXAMPLES=OFF -DSANITIZE=OFF -DCMAKE_C_STANDARD=99
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

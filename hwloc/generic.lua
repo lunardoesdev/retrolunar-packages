@@ -42,7 +42,7 @@ return recipe({
         # ordinary bin_PROGRAMS (utils/hwloc/Makefile.am:33,
         # utils/lstopo/Makefile.am:19). They are compiled and installed as
         # target binaries, never executed.
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

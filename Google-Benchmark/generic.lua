@@ -24,7 +24,7 @@ return recipe({
         # README.md and is harmless. BENCHMARK_INSTALL_TOOLS (:32) covers the
         # Python reporting scripts, which are data.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DBENCHMARK_ENABLE_TESTING=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

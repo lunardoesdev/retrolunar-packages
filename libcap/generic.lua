@@ -49,10 +49,10 @@ return recipe({
         # portable path (libcap/Makefile:141 falls back cleanly).
         # PAM_CAP=no and GOLANG=no keep the top-level Makefile from recursing
         # into pam_cap and the Go bindings.
-        make -j1 -C libcap CC="$CC" AR="$AR" RANLIB="$RANLIB" BUILD_CC="cc" \
+        make -j"$CORES" -C libcap CC="$CC" AR="$AR" RANLIB="$RANLIB" BUILD_CC="cc" \
           lib=lib prefix="$OUT" SHARED=no PTHREADS=yes USE_GPERF=no \
           PAM_CAP=no GOLANG=no
-        make -j1 -C libcap install CC="$CC" AR="$AR" RANLIB="$RANLIB" BUILD_CC="cc" \
+        make -j"$CORES" -C libcap install CC="$CC" AR="$AR" RANLIB="$RANLIB" BUILD_CC="cc" \
           lib=lib prefix="$OUT" SHARED=no PTHREADS=yes USE_GPERF=no \
           PAM_CAP=no GOLANG=no
     ]]

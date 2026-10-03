@@ -21,7 +21,7 @@ return recipe({
         # NEON defaults ON (line 75) and is selected by the compiler for ARM
         # targets; nothing needs turning off for it.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DSOUNDSTRETCH=OFF -DSOUNDTOUCH_DLL=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

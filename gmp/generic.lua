@@ -10,8 +10,8 @@ return recipe({
         # config.hin either - so the standard guard has to name it.
         touch aclocal.m4 configure config.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1
-        make -j1 install
-        make -j1 install-html
+        make -j"$CORES"
+        make -j"$CORES" install
+        make -j"$CORES" install-html
     ]]
 })

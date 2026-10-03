@@ -8,7 +8,7 @@ return recipe({
         # variant. All three are wanted; the programs and tests are host-side
         # and stay off.
         cmake -S . -B build $CMAKE_FLAGS -DENABLE_PROGRAMS=OFF -DENABLE_TESTING=OFF -DUSE_SHARED_MBEDTLS_LIBRARY=OFF -DUSE_STATIC_MBEDTLS_LIBRARY=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

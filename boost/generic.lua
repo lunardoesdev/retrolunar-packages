@@ -50,7 +50,7 @@ return recipe({
         # here: one recipe covers mingw, all four Android architectures and
         # clang-native.
         cmake -S . -B build $CMAKE_FLAGS
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

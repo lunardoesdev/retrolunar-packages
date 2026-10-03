@@ -39,7 +39,7 @@ return recipe({
         find . -name 'configure' | xargs touch
         find . -name 'aclocal.m4' | xargs touch
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         make install
         # preloadable_libintl.so is meant to be LD_PRELOADed; the
         # installed mode 0644 would be useless.

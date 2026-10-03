@@ -11,7 +11,7 @@ return recipe({
         # "the bundled program" as something FMT_TEST turned off, which was
         # never true.
         cmake -S . -B build $CMAKE_FLAGS -DFMT_TEST=OFF -DFMT_DOC=OFF -DFMT_INSTALL=ON -DBUILD_SHARED_LIBS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

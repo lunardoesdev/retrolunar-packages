@@ -18,7 +18,7 @@ return recipe({
         # RAPIDJSON_BUILD_TESTS=OFF skips test/, which needs the
         # thirdparty/gtest submodule the tag archive does not carry.
         cmake -S . -B build $CMAKE_FLAGS -DRAPIDJSON_BUILD_DOC=OFF -DRAPIDJSON_BUILD_EXAMPLES=OFF -DRAPIDJSON_BUILD_TESTS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

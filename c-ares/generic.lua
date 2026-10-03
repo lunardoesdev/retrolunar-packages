@@ -11,7 +11,7 @@ return recipe({
         ./configure $AUTOCONF_CONFIGURE_FLAGS --enable-static --disable-shared --with-pic --disable-tests
         touch aclocal.m4 configure src/lib/ares_config.h.in include/ares_build.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

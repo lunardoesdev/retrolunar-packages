@@ -7,7 +7,7 @@ return recipe({
         # level, so point -S at it. Static library, header, pkg-config file
         # and the xxhsum tool; nothing here ever runs a target binary.
         cmake -S cmake_unofficial -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

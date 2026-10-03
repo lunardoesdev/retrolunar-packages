@@ -28,7 +28,7 @@ return recipe({
         # doc/Makefile and man/Makefile, and the tree carries a Makefile.in in
         # each of those five places. The sweep covers all of them.
         find . -name 'Makefile.in' | xargs touch
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

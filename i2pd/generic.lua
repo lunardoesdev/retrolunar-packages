@@ -16,7 +16,7 @@ return recipe({
             -DWITH_UPNP=OFF \
             -DWITH_GIT_VERSION=OFF \
             -DBUILD_TESTING=OFF
-        cmake --build cmakebuild --parallel 1
+        cmake --build cmakebuild --parallel "$CORES"
         # cmake --install lays down bin/i2pd and the three archives and nothing
         # else: build/CMakeLists.txt has exactly four install() rules, at :74,
         # :87, :100 and :411. No headers, no .pc, no CMake package config.

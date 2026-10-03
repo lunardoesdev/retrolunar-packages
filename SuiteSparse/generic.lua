@@ -119,7 +119,7 @@ return recipe({
             -DCHOLMOD_SUPERNODAL=OFF \
             -DSUITESPARSE_USE_OPENMP=OFF \
             -DSUITESPARSE_USE_PYTHON=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

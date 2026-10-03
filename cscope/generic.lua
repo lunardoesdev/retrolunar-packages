@@ -21,7 +21,7 @@ return recipe({
         # finds nothing; src/Makefile.am then links with no $(CURSES_LIBS).
         # Nothing in this prefix provides ncurses, so the build is left to
         # whatever the target sysroot offers, exactly as upstream defaults.
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

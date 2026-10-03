@@ -23,7 +23,7 @@ return recipe({
         # anywhere under source/lexbor, so there is no thread library to
         # resolve and no reason to pass it.
         cmake -S . -B build $CMAKE_FLAGS -DLEXBOR_BUILD_SHARED=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
         # lexbor.pc's Libs is a genuine upstream packaging defect, on every
         # system. lexbor.pc.in renders `Libs: -L${libdir} -l@PROJECT_NAME@`,

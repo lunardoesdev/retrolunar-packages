@@ -42,7 +42,7 @@ return recipe({
         # definition Bionic would have supplied.
         touch aclocal.m4 configure include/config.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1 CFLAGS="$CFLAGS -Din_addr_t=uint32_t"
+        make -j"$CORES" CFLAGS="$CFLAGS -Din_addr_t=uint32_t"
         make install
     ]]
 })

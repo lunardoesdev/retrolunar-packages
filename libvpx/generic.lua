@@ -11,7 +11,7 @@ return recipe({
         ./configure --prefix="$OUT" \
           --disable-examples --disable-docs --disable-unit-tests \
           --disable-tools --enable-pic --enable-static --disable-shared
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

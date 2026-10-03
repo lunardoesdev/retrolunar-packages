@@ -9,7 +9,7 @@ return recipe({
         # LDFLAGS) are the ones the system already exports. IGRAPHICS and
         # the man pages stay off by default; only the archive and the header
         # are wanted.
-        make -j1 CC="$CC" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" PREFIX="$OUT"
+        make -j"$CORES" CC="$CC" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" PREFIX="$OUT"
         make install-lib install-include PREFIX="$OUT"
     ]]
 })

@@ -34,7 +34,7 @@ return recipe({
         # bytes), so the generator is never even built - which is what
         # src/CMakeLists.txt:6 means by "it complicates cross-compiling".
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_LSR_TESTS=OFF -DWITH_OPENMP=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

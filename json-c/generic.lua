@@ -23,7 +23,7 @@ return recipe({
             -DBUILD_APPS=OFF \
             -DBUILD_TESTING=OFF \
             -DDISABLE_WERROR=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

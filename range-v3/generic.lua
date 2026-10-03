@@ -30,7 +30,7 @@ return recipe({
         # module.modulemap - which is why this recipe runs upstream's own
         # install rather than copying headers by hand.
         cmake -S . -B build $CMAKE_FLAGS -DRANGE_V3_TESTS=OFF -DRANGE_V3_EXAMPLES=OFF -DRANGE_V3_DOCS=OFF -DRANGE_V3_PERF=OFF -DRANGE_V3_HEADER_CHECKS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

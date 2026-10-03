@@ -25,7 +25,7 @@ return recipe({
         # (An earlier version of this recipe claimed there was no .pc; that
         # was wrong.)
         cmake -S . -B build $CMAKE_FLAGS -DMINIAUDIO_INSTALL=ON -DMINIAUDIO_BUILD_EXAMPLES=OFF -DMINIAUDIO_BUILD_TESTS=OFF -DMINIAUDIO_BUILD_TOOLS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

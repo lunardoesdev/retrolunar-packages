@@ -51,7 +51,7 @@ return recipe({
             -Dxml-backend=expat -Dnls=disabled -Dtools=disabled \
             -Dcache-build=disabled -Dtests=disabled -Dtests-external-fonts=disabled \
             -Ddoc=disabled
-        ninja -C build --parallel 1
-        ninja -C build install
+        ninja -C build -j "$CORES"
+        ninja -C build -j "$CORES" install
     ]]
 })

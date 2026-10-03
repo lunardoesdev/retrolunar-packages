@@ -21,7 +21,7 @@ return recipe({
         touch doc/gnu.eps
         touch aclocal.m4 configure src/include/config.hin
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

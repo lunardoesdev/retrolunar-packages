@@ -47,7 +47,7 @@ return recipe({
         # never touch a cross archive. LIBDIR= is passed because
         # config/Makefile.linux:16-21 picks lib64 from `uname -m` of the
         # BUILD host, which would put a 32-bit target's archive under lib64.
-        make -j1 glew.lib.static CC="$CC" AR="$AR" RANLIB="$RANLIB" STRIP= GLEW_DEST="$OUT" GLEW_PREFIX="$OUT" LIBDIR="$OUT/lib" LDFLAGS.GL= GLEW_NO_GLU=-DGLEW_NO_GLU
+        make -j"$CORES" glew.lib.static CC="$CC" AR="$AR" RANLIB="$RANLIB" STRIP= GLEW_DEST="$OUT" GLEW_PREFIX="$OUT" LIBDIR="$OUT/lib" LDFLAGS.GL= GLEW_NO_GLU=-DGLEW_NO_GLU
         mkdir -p $OUT/include/GL $OUT/lib/pkgconfig
         cp include/GL/glew.h include/GL/glxew.h include/GL/wglew.h include/GL/eglew.h $OUT/include/GL/
         cp lib/libGLEW.a $OUT/lib/

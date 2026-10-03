@@ -25,7 +25,7 @@ return recipe({
         # that does not exist, and install(TARGETS) on a missing artefact
         # fails. Building everything avoids that second failure.
         cmake -S . -B build $CMAKE_FLAGS
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

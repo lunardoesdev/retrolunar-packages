@@ -36,7 +36,7 @@ return recipe({
         # and configure aborts. Turning it off states the answer instead of
         # depending on which headers happen to be installed.
         ./configure $AUTOCONF_CONFIGURE_FLAGS --disable-libunwind
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

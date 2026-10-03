@@ -37,7 +37,7 @@ return recipe({
         # GUI/SDL wrapper. ZZIPDOCS find_package(PythonInterp 3.5 REQUIRED)
         # (docs/CMakeLists.txt:23), so it has to go regardless.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DZZIPFSEEKO=OFF -DZZIP_COMPAT=OFF -DZZIPSDL=OFF -DZZIPWRAP=OFF -DZZIPBINS=OFF -DZZIPTEST=OFF -DZZIPDOCS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

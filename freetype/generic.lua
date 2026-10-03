@@ -15,6 +15,6 @@ return recipe({
             -Dzlib=system -Dpng=enabled \
             -Dbrotli=disabled -Dbzip2=disabled -Dharfbuzz=disabled \
             -Dtests=disabled
-        ninja -C build install
+        ninja -C build -j "$CORES" install
     ]]
 })

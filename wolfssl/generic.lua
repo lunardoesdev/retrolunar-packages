@@ -14,7 +14,7 @@ return recipe({
         # which needs the platform liblog rather than anything in this
         # prefix. Examples are off for the same reason: host programs.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DWOLFSSL_EXAMPLES=no -DWOLFSSL_CRYPT_TESTS=no -DWOLFSSL_OPENSSLEXTRA=yes
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

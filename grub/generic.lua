@@ -49,7 +49,7 @@ return recipe({
         # triggers.
         touch Makefile.util.am
         find . -name 'Makefile.in' | xargs touch
-        make -j1 TARGET_CFLAGS+=" -fno-pic" TARGET_LDFLAGS+=" -fno-pie -no-pie"
+        make -j"$CORES" TARGET_CFLAGS+=" -fno-pic" TARGET_LDFLAGS+=" -fno-pie -no-pie"
         make install
     ]]
 })

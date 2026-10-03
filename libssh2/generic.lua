@@ -28,7 +28,7 @@ return recipe({
         # not a top-level config.h.in.
         touch aclocal.m4 configure src/libssh2_config.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

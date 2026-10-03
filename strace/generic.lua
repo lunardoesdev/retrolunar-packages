@@ -53,7 +53,7 @@ return recipe({
         # this project never runs one under an emulator. A strace built for
         # aarch64 is inert until someone runs it on a device.
         ./configure $AUTOCONF_CONFIGURE_FLAGS
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

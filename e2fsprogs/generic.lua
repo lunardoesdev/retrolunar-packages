@@ -14,7 +14,7 @@ return recipe({
             --disable-fsck
         touch aclocal.m4 configure lib/config.h.in lib/dirpaths.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

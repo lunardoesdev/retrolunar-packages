@@ -28,7 +28,7 @@ return recipe({
         # style flag to the INTERFACE target after check_cxx_compiler_flag
         # accepts it, so it is a no-op on a compiler that lacks it.
         cmake -S . -B build $CMAKE_FLAGS -DONEDPL_BACKEND=serial
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

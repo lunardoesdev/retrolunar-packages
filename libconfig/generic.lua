@@ -9,7 +9,7 @@ return recipe({
         # BUILD_CXX stays on: the C++ binding is part of what libconfig is,
         # and it is a separate archive with its own pkg-config file.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

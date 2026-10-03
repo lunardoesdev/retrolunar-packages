@@ -49,7 +49,7 @@ return recipe({
             -Dprotobuf_BUILD_CONFORMANCE=OFF \
             -Dprotobuf_BUILD_EXAMPLES=OFF \
             -Dprotobuf_WITH_ZLIB=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

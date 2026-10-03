@@ -34,7 +34,7 @@ return recipe({
         # No DESTDIR: --prefix=$OUT already comes from $MESON_FLAGS, so
         # DESTDIR would concatenate into $OUT$OUT.
         meson setup build $MESON_FLAGS -Dbuildtype=release -Ddefault_library=static -Dtests=false -Dexamples=false -Dfuzz=false -Dpython=false
-        meson compile -C build --jobs 1
+        meson compile -C build --jobs "$CORES"
         meson install -C build
     ]]
 })

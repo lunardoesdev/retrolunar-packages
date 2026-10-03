@@ -9,7 +9,7 @@ return recipe({
         ./configure $AUTOCONF_CONFIGURE_FLAGS --enable-static --disable-shared --with-pic --enable-pcre2-8 --enable-pcre2-16 --enable-pcre2-32 --disable-cpp
         touch aclocal.m4 configure src/config.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

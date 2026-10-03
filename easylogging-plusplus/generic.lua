@@ -38,7 +38,7 @@ return recipe({
         # cmake 4.x floor, which $CMAKE_FLAGS handles with
         # -DCMAKE_POLICY_VERSION_MINIMUM=3.5.
         cmake -S . -B build $CMAKE_FLAGS -Dbuild_static_lib=OFF -Dtest=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

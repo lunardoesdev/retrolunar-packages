@@ -7,7 +7,7 @@ return recipe({
         # xmltest and tinystr are host programs, and a prefix is for the
         # library.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -Dtinyxml2_BUILD_TOOLS=OFF -Dtinyxml2_BUILD_TESTING=OFF -Dtinyxml2_INSTALL=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

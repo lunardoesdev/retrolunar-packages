@@ -24,8 +24,8 @@ return recipe({
         # ncurses has no configure.ac, so a lookup for one finds nothing.
         touch aclocal.m4 configure include/ncurses_cfg.hin
         find . -name 'Makefile.in' | xargs touch
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
         # Preserve traditional link names expected by consumers.
         # Consumers in this tree link the un-suffixed names (curses, form,
         # menu, panel); ncurses builds only the wide-char ones, so alias them

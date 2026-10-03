@@ -20,7 +20,7 @@ return recipe({
             *) echo "openssl: unsupported HOST_OS $HOST_OS" >&2; exit 1 ;;
         esac
         ./Configure "$ssl_target" --prefix="$OUT" --libdir=lib no-shared no-tests no-docs no-engine no-dso no-dynamic-engine
-        make -j1
+        make -j"$CORES"
         make install_sw
     ]]
 })

@@ -17,7 +17,7 @@ return recipe({
         find . -name 'Makefile.in' | xargs touch
         # The release includes these docs; avoid requiring TeX to rebuild them.
         touch doc/gperf.info doc/gperf.pdf doc/gperf.html doc/gperf.1
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

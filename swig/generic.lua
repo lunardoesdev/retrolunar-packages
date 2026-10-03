@@ -51,7 +51,7 @@ return recipe({
         # PATH pointing at the host toolchain, so cmake finds the host bison.
         # No python3 is needed: nothing in CMakeLists.txt looks for one.
         cmake -S . -B build $CMAKE_FLAGS -DWITH_PCRE=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

@@ -25,7 +25,7 @@ return recipe({
         # CMARK_LIB_FUZZER is already OFF and stays off: it would add -fsanitize
         # =fuzzer flags (CMakeLists.txt:100-108) and add_subdirectory(fuzz).
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

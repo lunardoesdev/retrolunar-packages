@@ -17,7 +17,7 @@ return recipe({
         # Single Makefile: configure.ac:201 AC_CONFIG_FILES([Makefile]) and
         # there is no AC_CONFIG_SUBDIRS, so no sub-tree Makefile.in exists.
         find . -name 'Makefile.in' | xargs touch
-        make -j1
-        make -j1 install
+        make -j"$CORES"
+        make -j"$CORES" install
     ]]
 })

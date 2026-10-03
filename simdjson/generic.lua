@@ -10,7 +10,7 @@ return recipe({
         # skip them; the install rules for the archive, the headers and the
         # generated single-header all hang off it.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF
-        cmake --build build --target simdjson --parallel 1
+        cmake --build build --target simdjson --parallel "$CORES"
         cmake --install build
     ]]
 })

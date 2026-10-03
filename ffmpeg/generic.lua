@@ -15,7 +15,7 @@ return recipe({
         # they are served by android.lua (and any other family file), which
         # reads $HOST_ARCH/$HOST_OS from the system.
         ./configure --prefix="$OUT" --cc="$CC" --cxx="$CXX" --ar="$AR" --ranlib="$RANLIB" --strip="$STRIP" --pkg-config-flags="--static" --enable-static --disable-shared --disable-doc --disable-programs --disable-network --disable-iconv --disable-libxcb --enable-zlib --enable-bzlib --enable-lzma --enable-libopus --enable-libvpx --enable-libmp3lame --enable-pic --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS"
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

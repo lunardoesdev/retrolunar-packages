@@ -20,7 +20,7 @@ return recipe({
             -DENABLE_DOCUMENTATION=OFF \
             -DREDIS_STORAGE_BACKEND=OFF \
             -DHTTP_STORAGE_BACKEND=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

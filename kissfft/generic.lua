@@ -29,7 +29,7 @@ return recipe({
         # consumer's link line. double is pinned here because it is the
         # conventional default for a numeric prefix.
         cmake -S . -B build $CMAKE_FLAGS -DKISSFFT_STATIC=ON -DKISSFFT_TEST=OFF -DKISSFFT_TOOLS=OFF -DKISSFFT_DATATYPE=double
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

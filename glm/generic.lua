@@ -12,7 +12,7 @@ return recipe({
         # IDEs have something to show. GLM_BUILD_TESTS=OFF is upstream's
         # default, passed explicitly because the test programs are host code.
         cmake -S . -B build $CMAKE_FLAGS -DGLM_BUILD_LIBRARY=OFF -DGLM_BUILD_TESTS=OFF -DGLM_BUILD_INSTALL=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

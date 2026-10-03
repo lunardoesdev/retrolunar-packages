@@ -23,9 +23,9 @@ return recipe({
         # `make -C src` only archives it into .libs/ and copies nothing into
         # $OUT, which would leave libseccomp.a missing from the prefix while
         # its headers, man pages and .pc all shipped.
-        make -j1 -C src install-libLTLIBRARIES
-        make -j1 -C include install-includeHEADERS
-        make -j1 -C doc install-man
-        make -j1 -C . install-pkgconfDATA
+        make -j"$CORES" -C src install-libLTLIBRARIES
+        make -j"$CORES" -C include install-includeHEADERS
+        make -j"$CORES" -C doc install-man
+        make -j"$CORES" -C . install-pkgconfDATA
     ]]
 })

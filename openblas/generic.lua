@@ -52,9 +52,9 @@ return recipe({
         # The same variables must be given to the install line: Makefile:132
         # says so, because install re-runs Makefile.install against the same
         # configuration.
-        make -j1 HOSTCC=cc $OB_TARGET_ARGS NOFORTRAN=1 NO_SHARED=1 \
+        make -j"$CORES" HOSTCC=cc $OB_TARGET_ARGS NOFORTRAN=1 NO_SHARED=1 \
              CC="$CC" AR="$AR" RANLIB="$RANLIB" PREFIX=$OUT
-        make -j1 HOSTCC=cc $OB_TARGET_ARGS NOFORTRAN=1 NO_SHARED=1 \
+        make -j"$CORES" HOSTCC=cc $OB_TARGET_ARGS NOFORTRAN=1 NO_SHARED=1 \
              CC="$CC" AR="$AR" RANLIB="$RANLIB" PREFIX=$OUT install
     ]]
 })

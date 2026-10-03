@@ -37,7 +37,7 @@ return recipe({
         # USE_BUNDLED_TINYXML2 defaults ON, so nothing is looked up in
         # $PREFIX.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DDISABLE_DMAKE=ON
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

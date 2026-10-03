@@ -30,9 +30,9 @@ return recipe({
         # gone. The system's LDFLAGS already carry -lm.
         # USE_PREBUILT_MANPAGES=y for the reason given in generic.lua: the
         # alternative renders the manuals by RUNNING the freshly built tools.
-        make -j1 LZO_SUPPORT=0 USE_PREBUILT_MANPAGES=y INSTALL_PREFIX="$OUT" \
+        make -j"$CORES" LZO_SUPPORT=0 USE_PREBUILT_MANPAGES=y INSTALL_PREFIX="$OUT" \
             LIBS="-lm -lz -llz4 -llzma -lzstd"
-        make -j1 LZO_SUPPORT=0 USE_PREBUILT_MANPAGES=y INSTALL_PREFIX="$OUT" \
+        make -j"$CORES" LZO_SUPPORT=0 USE_PREBUILT_MANPAGES=y INSTALL_PREFIX="$OUT" \
             LIBS="-lm -lz -llz4 -llzma -lzstd" install
     ]]
 })

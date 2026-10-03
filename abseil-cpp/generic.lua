@@ -18,7 +18,7 @@ return recipe({
         # Upstream ships no aggregate absl.pc, so consumers use
         # find_package(absl) or the per-module .pc files.
         cmake -S . -B build $CMAKE_FLAGS -DBUILD_SHARED_LIBS=OFF -DABSL_BUILD_TESTING=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

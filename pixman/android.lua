@@ -39,7 +39,7 @@ return recipe({
         meson setup build $MESON_FLAGS -Dbuildtype=release -Ddefault_library=static \
             -Dtests=disabled -Ddemos=disabled -Dlibpng=disabled -Dgtk=disabled \
             -Dopenmp=disabled -Darm-simd=disabled -Dneon=disabled
-        ninja -C build --parallel 1
-        ninja -C build install
+        ninja -C build -j "$CORES"
+        ninja -C build -j "$CORES" install
     ]]
 })

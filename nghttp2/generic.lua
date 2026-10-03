@@ -10,7 +10,7 @@ return recipe({
         ./configure $AUTOCONF_CONFIGURE_FLAGS --enable-static --disable-shared --with-pic --disable-app --disable-examples --disable-tests --disable-python-bindings --disable-rust-bindings --without-libxml2 --without-libevent-openssl --without-jansson --without-c-ares --without-libev --without-zlib
         touch aclocal.m4 configure config.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })

@@ -35,9 +35,9 @@ return recipe({
     build = [[
         cp -r $NESTDIR/source/sevenzip/* .
         # upstream's documented entry point (readme.txt:138-144), run from the
-        # bundle directory that holds makefile.gcc. `make` already defaults to
-        # serial; -j1 spells that out.
-        make -C CPP/7zip/Bundles/Alone2 -f makefile.gcc -j1 CC="$CC" CXX="$CXX" CFLAGS_BASE2="$CFLAGS" CXXFLAGS_BASE2="$CXXFLAGS" CFLAGS_WARN_WALL="-Wall -Wextra"
+        # bundle directory that holds makefile.gcc. No -j here: the system's
+        # $MAKEFLAGS (-j"$CORES") reaches this make and its submakes.
+        make -C CPP/7zip/Bundles/Alone2 -f makefile.gcc CC="$CC" CXX="$CXX" CFLAGS_BASE2="$CFLAGS" CXXFLAGS_BASE2="$CXXFLAGS" CFLAGS_WARN_WALL="-Wall -Wextra"
         mkdir -p $OUT/bin
         cp CPP/7zip/Bundles/Alone2/_o/7zz $OUT/bin/7zz
     ]]

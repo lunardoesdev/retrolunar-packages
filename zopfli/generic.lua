@@ -8,7 +8,7 @@ return recipe({
         # and both tools in one rule, so naming only the library target would
         # leave the install step without files to copy. All four are cheap.
         cmake -S . -B build $CMAKE_FLAGS -DZOPFLI_BUILD_SHARED=OFF
-        cmake --build build --parallel 1
+        cmake --build build --parallel "$CORES"
         cmake --install build
     ]]
 })

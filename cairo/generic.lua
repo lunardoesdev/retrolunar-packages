@@ -57,7 +57,7 @@ return recipe({
             -Dxlib=disabled -Dxcb=disabled -Dxlib-xcb=disabled -Dquartz=disabled \
             -Ddwrite=disabled -Dglib=disabled -Dlzo=disabled -Dspectre=disabled \
             -Dsymbol-lookup=disabled -Dgtk2-utils=disabled -Dtests=disabled
-        ninja -C build --parallel 1
-        ninja -C build install
+        ninja -C build -j "$CORES"
+        ninja -C build -j "$CORES" install
     ]]
 })

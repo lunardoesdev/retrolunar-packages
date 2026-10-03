@@ -10,7 +10,7 @@ return recipe({
         ./configure $AUTOCONF_CONFIGURE_FLAGS --enable-static --disable-shared --with-pic --disable-python-bindings
         touch aclocal.m4 configure include/config.h.in
         find . -name 'Makefile.in' | xargs touch
-        make -j1
+        make -j"$CORES"
         make install
     ]]
 })
