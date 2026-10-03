@@ -779,7 +779,14 @@ ANDROID_HOME=/path/to/sdk sh build.sh # NDK systems need this
   API 21 lacks `stderr` as a real symbol, `POSIX_MADV_*`,
   `process_vm_readv`, `posix_spawn`, `mblen`/`getpass`, `O_BINARY` —
   anything needing them wants API 24+ or gets dropped (wget, bash, ninja,
-  llama.cpp). `sfml` is X11-only, `raylib` uses removed NDK APIs.
+  llama.cpp). `sfml` is X11-only. raylib builds on all four Android ABIs at
+  API 21 (NDK r28): the earlier note that it "uses removed NDK APIs" does
+  not hold — its one suspicious call, miniaudio's `__system_property_get`,
+  is still exported by libc at every API level in the sysroot
+  (`__system_property_get@@LIBC` in `usr/lib/<triple>/<api>/libc.so`, all
+  four ABIs, 21/24/28/30/35). The real raylib problem is packaging, not the
+  platform: its `LIBS_PRIVATE` never reaches either consumer channel, see
+  `raylib/android.lua`.
 - No `jj`/`git` commands inside recipes; no network access at build time
   except `curl` in `source.lua` fetch blocks.
 - No emulation, ever: never run or test a target binary under QEMU (any
