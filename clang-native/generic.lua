@@ -64,8 +64,8 @@ return system({
         # --prefix only. Unlike the cross systems there is no cross-file to
         # pass, because meson takes the native toolchain from the environment
         # ($CC, $CXX, $AR and friends are all exported above), and no policy
-        # floor is needed because this is not cmake. Serial builds come from
-        # the recipes' own `meson compile --jobs 1`, not from here.
+        # floor is needed because this is not cmake. The job count comes from
+        # the recipes' own `meson compile --jobs "$CORES"`, not from here.
         MESON_FLAGS="--prefix=$OUT"
         export CMAKE_PREFIX_PATH CMAKE_FLAGS MESON_FLAGS
 

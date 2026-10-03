@@ -240,19 +240,19 @@ Rules:
   termcap needs `CC="$CC -std=gnu89"` because it predates prototypes).
 - Build-body hygiene (hard rules): only `cp`, `./configure`, `cmake`,
   `make`, `make install`, `ninja`, `touch`, `find`, `mkdir`,
-  `cat`-heredocs.
-  NEVER `sed`, patches, `/dev/null`, or multi-job builds. A build must
-  never fan out: write the single-job option explicitly — `make -j1`,
-  `cmake --build build --parallel 1`, `ninja -C build`. This keeps logs
-  readable and ordering deterministic. Note the two cases are not the
-  same: `make` already defaults to serial (bare `make` reports
-  `MAKEFLAGS=[]`), so `-j1` there is about being explicit, while ninja
-  does NOT default to serial, so the flag is load-bearing. A bare `make`
-  in a recipe is not a defect; a recipe that fans out is. (`opencv/generic.lua`
-  was the last recipe still using `-j$(nproc ...)`; it now uses
-  `cmake --build build --parallel 1`. `make -j1` was once rejected as a
-  correctness requirement across five packages, and the resulting
-  "fixes" were edits to correct recipes for no reason.)
+  `cat`-heredocs. NEVER `sed`, patches or `/dev/null`.
+  Job count is never hardcoded: every build tool takes `$CORES`, which each
+  system exports (`CORES="${CORES:-1}"`, `MAKEFLAGS="-j$CORES"`), so a build
+  is serial unless the caller asked for more. Write
+  `make -j"$CORES"`, `cmake --build build --parallel "$CORES"`,
+  `ninja -C build -j "$CORES"`, `meson compile -C build --jobs "$CORES"`.
+  A recipe that writes a literal `-j1`, `--parallel 1`, `--jobs 1` or
+  `-j$(nproc)` is the defect — the count is a system fact, not a recipe one.
+  A bare `make` needs no flag of its own: `$MAKEFLAGS` carries `-j"$CORES"`
+  into it and into its submakes, which is also how a hand-written makefile
+  that invokes sub-makes recursively stays consistent. (`opencv/generic.lua`
+  was the last recipe still using `-j$(nproc ...)`; the tree-wide pass
+  replaced every literal job count with `$CORES`.)
   Rewriting a *generated* artifact the build itself just produced, under
   `$OUT`, is not patching an upstream source and is allowed: use `awk`
   plus `cp`, never `sed -i`. That line is where upstream inputs end and
@@ -393,6 +393,12 @@ Rules:
   uniformity wins).
 - `--prefix=$OUT` / `-DCMAKE_INSTALL_PREFIX=$OUT` (install target),
   search flags point at `$PREFIX` (where deps landed).
+- Every system exports `CORES="${CORES:-1}"` and `MAKEFLAGS="-j$CORES"`.
+  The default keeps a build serial when nobody asked otherwise, and taking
+  the value from the environment with `${CORES:-1}` means retrolunar can
+  start exporting `CORES` itself with no change here. `MAKEFLAGS` is what
+  makes a bare `make` — and any recursive sub-make it spawns — honour the
+  same count as the recipe line that invoked it.
 - Keep values short: build long ones by appending
   (`FOO="$FOO more"`), one `export A B C` per section, comments
   explaining non-obvious choices (why `-isystem` is C-only, why `LDFLAGS`
@@ -513,11 +519,10 @@ Two questions decide it:
    'Writing a build recipe' for the rules themselves.
 2. **Is the recipe doing what the package actually needs?** The real config
    template name, a correct autotools timestamp guard, no host programs
-   compiled on a cross build, no target binary ever executed, a build that
-   never fans out (the single-job option written explicitly; `make`
-   already defaults to serial, so a missing `-j1` on its own is not a
-   defect — see 'Writing a build recipe'), dependencies that actually
-   exist, `require()` spelled the way the loader resolves it.
+   compiled on a cross build, no target binary ever executed, a job count
+   that comes from `$CORES` rather than a literal (`-j1`, `--parallel 1`,
+   `--jobs 1`, `-j$(nproc)` — see 'Writing a build recipe'), dependencies
+   that actually exist, `require()` spelled the way the loader resolves it.
 
 A REJECT has to be precise enough that the adder can fix it without asking
 a question. A vague REJECT is useless. A reviewer may also reject a recipe
