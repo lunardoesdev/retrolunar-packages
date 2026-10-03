@@ -126,6 +126,11 @@ stage1.md § 5 asked a builder to resolve each one after the loader's
 `cp -rf`. All five resolve; output in stage3.md. They are relative, as the
 recipe's comment claims.
 
+Superseded: the recipe no longer creates these symlinks. `$OUT/var/lib/i2pd`
+is now filled with `mkdir -p` plus `cp` of the same files, so nothing in the
+staged output is a symlink. The finding above stands as the reason the old
+version had to make them relative; the current version sidesteps it.
+
 ## Verdict
 
 ACCEPT, conditional on the four fixes above, all of which are in the tree.

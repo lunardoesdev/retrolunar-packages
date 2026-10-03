@@ -183,13 +183,18 @@ $ find share/i2pd/certificates -name '*.crt' | wc -l
 22
 $ ls share/man/man1/
 i2pd.1
-$ find var/lib/i2pd -type l | wc -l
-5
+$ ls var/lib/i2pd/
+certificates  i2pd.conf  subscriptions.txt  tunnels.conf  tunnels.d
 ```
 
-The five symlinks are the same relative ones the mingw build verified as
-resolving (`stage3.md`); they are counted here rather than re-resolved
-because `stage3.md` already did that against the identical recipe lines.
+At build time this directory held the five relative symlinks the mingw build
+verified as resolving (`stage3.md`); they were counted rather than
+re-resolved because `stage3.md` already did that against the identical
+recipe lines.
+
+Superseded: at the time of this build the recipe created five relative
+symlinks there. It now copies the same files, so the listing above is the
+current expectation and was not re-run for this change.
 
 ## No target binary was executed
 

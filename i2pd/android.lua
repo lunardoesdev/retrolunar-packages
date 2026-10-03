@@ -69,11 +69,9 @@ return recipe({
         # verification that every quoted include still resolves.
         mkdir -p $OUT/include/i2pd
         cp i18n/*.h libi2pd/*.h libi2pd_client/*.h $OUT/include/i2pd/
-        mkdir -p $OUT/var/lib/i2pd
-        ln -sf ../../../share/i2pd/certificates $OUT/var/lib/i2pd/certificates
-        ln -sf ../../../etc/i2pd/tunnels.conf.d $OUT/var/lib/i2pd/tunnels.d
-        ln -sf ../../../etc/i2pd/i2pd.conf $OUT/var/lib/i2pd/i2pd.conf
-        ln -sf ../../../etc/i2pd/subscriptions.txt $OUT/var/lib/i2pd/subscriptions.txt
-        ln -sf ../../../etc/i2pd/tunnels.conf $OUT/var/lib/i2pd/tunnels.conf
+        # Copies, not symlinks; see generic.lua for why.
+        mkdir -p $OUT/var/lib/i2pd/tunnels.d
+        cp -r contrib/certificates $OUT/var/lib/i2pd/
+        cp contrib/i2pd.conf contrib/subscriptions.txt contrib/tunnels.conf $OUT/var/lib/i2pd/
     ]]
 })

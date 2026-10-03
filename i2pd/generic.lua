@@ -26,9 +26,7 @@ return recipe({
         # at RUN time, and none of that is in the cmake install. Upstream's own
         # Unix install rule is Makefile.linux:56-72; it is reproduced here
         # rather than run, because (a) it is a Makefile target in a cmake
-        # project, (b) `install -m 644` is not in the recipe hygiene list, and
-        # (c) its symlinks are absolute ${PREFIX} targets, which would dangle
-        # after the loader copies $OUT into the nest.
+        # project, and (b) `install -m 644` is not in the recipe hygiene list.
         mkdir -p $OUT/etc/i2pd/tunnels.conf.d
         cp contrib/i2pd.conf contrib/subscriptions.txt contrib/tunnels.conf $OUT/etc/i2pd/
         mkdir -p $OUT/share/doc/i2pd
@@ -50,14 +48,15 @@ return recipe({
         # distinct, so one directory resolves every quoted include.
         mkdir -p $OUT/include/i2pd
         cp i18n/*.h libi2pd/*.h libi2pd_client/*.h $OUT/include/i2pd/
-        # The data directory upstream points at with --datadir: five symlinks,
-        # made RELATIVE because $OUT is a staging dir whose final name is not
-        # known until the loader merges it into $NESTDIR/<sys>.
-        mkdir -p $OUT/var/lib/i2pd
-        ln -sf ../../../share/i2pd/certificates $OUT/var/lib/i2pd/certificates
-        ln -sf ../../../etc/i2pd/tunnels.conf.d $OUT/var/lib/i2pd/tunnels.d
-        ln -sf ../../../etc/i2pd/i2pd.conf $OUT/var/lib/i2pd/i2pd.conf
-        ln -sf ../../../etc/i2pd/subscriptions.txt $OUT/var/lib/i2pd/subscriptions.txt
-        ln -sf ../../../etc/i2pd/tunnels.conf $OUT/var/lib/i2pd/tunnels.conf
+        # The data directory a daemon is pointed at with --datadir. Upstream
+        # Makefile.linux:68-72 fills it with symlinks into ${PREFIX}; they are
+        # copies here instead, so the staging dir holds ordinary files and
+        # nothing depends on the final prefix name or on symlink survival
+        # through the loader's `cp -rf` merge. tunnels.d is an empty directory
+        # upstream (Makefile.linux:59 creates etc/i2pd/tunnels.conf.d empty),
+        # so it is just created.
+        mkdir -p $OUT/var/lib/i2pd/tunnels.d
+        cp -r contrib/certificates $OUT/var/lib/i2pd/
+        cp contrib/i2pd.conf contrib/subscriptions.txt contrib/tunnels.conf $OUT/var/lib/i2pd/
     ]]
 })

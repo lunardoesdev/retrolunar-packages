@@ -172,6 +172,11 @@ var/lib/i2pd/tunnels.conf -> ../../../etc/i2pd/tunnels.conf (OK)
 They survived the loader's `cp -rf "$OUT"/. "$NESTDIR/<sys>/"` because they
 are relative, which is the reason the recipe makes them so.
 
+Superseded: the recipe now copies these files into `$OUT/var/lib/i2pd`
+instead of symlinking, so this check no longer describes the current recipe
+and was not re-run. The old output is kept as the record of the build that
+was actually performed.
+
 **Imports** — the evidence that the linker fixes are real, read with
 `objdump -p`:
 
